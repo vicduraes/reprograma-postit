@@ -2,21 +2,20 @@ import React from "react";
 import "./Campo.css";
 
 class Campo extends React.Component {
+
   constructor(props) {
     super(props)
-    this.state = {
-      erro: ''
-    }
+    this.state = { erro: '' }
   }
 
   valida = (evento) => {
-    const alvo = evento.target;
-
-    if (this.props.obrigatorio && alvo.value.trim() === '') {
-      const state = {
-        erro: 'Campo obrigatório'
-      }
-      this.setState(state)
+    const input = evento.target // document.querySelector(#)
+    if (this.props.required && input.value.trim() === '') {
+      this.setState({ erro: "Campo obrigatório" })
+    } else if (this.props.minLength && input.value.length < this.props.minLength) {
+      this.setState({ erro: `Digite pelo menos ${this.props.minLength} caracteres` })
+    } else {
+      this.setState({ erro: '' })
     }
   }
 
@@ -35,6 +34,12 @@ class Campo extends React.Component {
       </div>
     )
   }
+
 }
 
 export default Campo;
+
+// 1) O componente pode mudar de estado? Sim // classe
+// 2) O que muda? state = {erro: ''} ou {erro: 'campo obrigatório'} // constructor
+// 3) Qual o estado inicial? state = {erro: ''} // constructor
+
