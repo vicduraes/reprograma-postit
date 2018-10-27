@@ -14,7 +14,9 @@ class Campo extends React.Component {
       this.setState({ erro: "Campo obrigatório" })
     } else if (this.props.minLength && input.value.length < this.props.minLength) {
       this.setState({ erro: `Digite pelo menos ${this.props.minLength} caracteres` })
-    } else {
+    } else if (this.props.pattern && !this.props.pattern.test(input.value)){
+      this.setState({ erro: "E-mail inválido" })
+    }else {
       this.setState({ erro: '' })
     }
   }
