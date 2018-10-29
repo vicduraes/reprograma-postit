@@ -1,7 +1,7 @@
-import React from "react";
+import React, {Component} from "react";
 import "./Campo.css";
 
-class Campo extends React.Component {
+class Campo extends Component {
 
   constructor(props) {
     super(props)
@@ -9,16 +9,20 @@ class Campo extends React.Component {
   }
 
   valida = (evento) => {
-    const input = evento.target // document.querySelector(#)
-    if (this.props.required && input.value.trim() === '') {
-      this.setState({ erro: "Campo obrigatório" })
-    } else if (this.props.minLength && input.value.length < this.props.minLength) {
-      this.setState({ erro: `Digite pelo menos ${this.props.minLength} caracteres` })
-    } else if (this.props.pattern && !this.props.pattern.test(input.value)){
-      this.setState({ erro: "E-mail inválido" })
-    }else {
-      this.setState({ erro: '' })
+    const input = evento.target; // document.querySelector(#)
+    const {value, type} = input;
+    const {required, minLength} = this.props; //Destructuring - ES6//
+    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    let mensagem = "";
+
+    if (required && value.trim() === '') {
+      mensagem = "Campo obrigatório" 
+    } else if (minLength && value.length < minLength) {
+      mensagem = `Digite pelo menos ${minLength} caracteres`
+    } else if (type === 'email' && !regex.test(value)){
+      mensagem = "E-mail inválido"
     }
+    this.setState({erro: mensagem})
   }
 
   render() {
@@ -31,6 +35,7 @@ class Campo extends React.Component {
           name={this.props.name}
           placeholder={this.props.placeholder}
           onChange={this.valida}
+          onBlur={this.valida} //QUANDO CLICAMOS NO CAMPO E SAÍMOS É CHAMADA A VALIDAÇÃO//
         />
         <p className="grupo__erro">{this.state.erro}</p>
       </div>
@@ -40,8 +45,3 @@ class Campo extends React.Component {
 }
 
 export default Campo;
-
-// 1) O componente pode mudar de estado? Sim // classe
-// 2) O que muda? state = {erro: ''} ou {erro: 'campo obrigatório'} // constructor
-// 3) Qual o estado inicial? state = {erro: ''} // constructor
-
