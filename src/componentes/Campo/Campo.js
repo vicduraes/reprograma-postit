@@ -1,28 +1,36 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "./Campo.css";
 
 class Campo extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { erro: '' }
+    this.state = { modificado: false, erro: '' }
+  }
+
+  temErro() {
+    if (!this.state.modificado || this.state.erro) {
+      return true
+    } else {
+      return false
+    }
   }
 
   valida = (evento) => {
     const input = evento.target; // document.querySelector(#)
-    const {value, type} = input;
-    const {required, minLength} = this.props; //Destructuring - ES6//
+    const { value, type } = input;
+    const { required, minLength } = this.props; //Destructuring - ES6//
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     let mensagem = "";
 
     if (required && value.trim() === '') {
-      mensagem = "Campo obrigatório" 
+      mensagem = "Campo obrigatório"
     } else if (minLength && value.length < minLength) {
       mensagem = `Digite pelo menos ${minLength} caracteres`
-    } else if (type === 'email' && !regex.test(value)){
+    } else if (type === 'email' && !regex.test(value)) {
       mensagem = "E-mail inválido"
     }
-    this.setState({erro: mensagem})
+    this.setState({ modificado: true, erro: mensagem }, this.props.onChange);
   }
 
   render() {

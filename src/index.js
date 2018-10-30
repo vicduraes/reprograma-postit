@@ -5,4 +5,4 @@ import Login from "./paginas/Login/Login";
 import Conta from "./paginas/Conta/Conta";
 
 const divisaoProjeto = document.querySelector("#projeto");
-ReactDOM.render(<Conta />, divisaoProjeto);
+ReactDOM.render(<Login />, divisaoProjeto);
