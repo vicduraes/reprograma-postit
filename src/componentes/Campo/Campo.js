@@ -8,7 +8,7 @@ class Campo extends Component {
     this.state = { modificado: false, erro: '' }
   }
 
-  temErro() {
+  temErro = () => {
     if (!this.state.modificado || this.state.erro) {
       return true
     } else {
