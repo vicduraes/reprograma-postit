@@ -9,9 +9,14 @@ import QuemSomos from "./paginas/Quem Somos/QuemSomos";
 import Contato from "./paginas/Contato/Contato";
 import NaoEncontrada from "./paginas/NaoEncontrada/NaoEncontrada";
 
-let usuario = null
+let usuario = JSON.parse(localStorage.getItem('usuario'));
 
-
+function logaUsuario(dados) {
+    const json = JSON.stringify(dados) //Convertendo objetos para texto para armazenar//
+    localStorage.setItem('usuario', json) //localStorage armazena os dados do browser, mas apenas pequenos dados//
+    usuario = dados
+    console.log('dados', dados)
+}
 
 function App() {
     return (
@@ -22,7 +27,10 @@ function App() {
                     return usuario ? <Home/> : <Redirect to="/login"/>
                 }} />
                 <Route path="/conta" component={Conta} />
-                <Route path="/login" component={Login} />
+                <Route path="/login" render={(props) => {
+                    return <Login historico={props.history} logaUsuario={logaUsuario} />
+                }}
+                />
                 <Route path="/quem-somos" component={QuemSomos} />
                 <Route path="/contato" component={Contato} />
                 <Route component={NaoEncontrada} /> 

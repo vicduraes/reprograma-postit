@@ -5,9 +5,14 @@ class Campo extends Component {
 
   constructor(props) {
     super(props)
+    this.valor = '';
     this.state = { modificado: false, erro: '' }
   }
 
+  getValor (){
+    return this.valor;
+  }
+  
   temErro = () => {
     if (!this.state.modificado || this.state.erro) {
       return true
@@ -31,6 +36,8 @@ class Campo extends Component {
       mensagem = "E-mail inválido"
     }
     this.setState({ modificado: true, erro: mensagem }, this.props.onChange);
+
+    this.valor = value;
   }
 
   render() {
