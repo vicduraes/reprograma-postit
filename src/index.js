@@ -19,10 +19,15 @@ function logaUsuario(dados) {
     console.log('dados', dados)
 }
 
+function deslogaUsuario (){
+    localStorage.removeItem('usuario');
+    usuario = null
+}
+
 function App() {
     return (
         <div className="app">
-            {<Navbar/>}
+            {<Navbar usuario={usuario} deslogaUsuario={deslogaUsuario}/>}
             <Switch>
                 <Route path="/" exact render={() => {
                     return usuario ? <Home/> : <Redirect to="/login"/>

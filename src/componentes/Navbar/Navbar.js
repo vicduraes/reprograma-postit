@@ -3,13 +3,15 @@ import "./Navbar.css";
 import logo from "./logo.png";
 import Menu from "../Menu/Menu";
 
-function Navbar() {
+//<Navbar usuario={usuario}>//
+
+function Navbar(props) {
     return (
         <header className="navbar">
             <a href="/">
                 <img className="navbar__logo" src={logo} alt="logo" />
             </a>
-            <Menu/>
+            <Menu usuario={props.usuario} deslogaUsuario={props.deslogaUsuario}/>
         </header>
     )
 }
