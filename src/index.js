@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { withRouter, BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import {Provider, connect} from "react-redux";
+import store from "./redux/store";
 import './index.css';
 import Home from "./paginas/Home/Home";
 import Login from "./paginas/Login/Login";
@@ -10,21 +12,11 @@ import Contato from "./paginas/Contato/Contato";
 import NaoEncontrada from "./paginas/NaoEncontrada/NaoEncontrada";
 import Navbar from "./componentes/Navbar/Navbar";
 
-let usuario = JSON.parse(localStorage.getItem('usuario'));
+function App(props) {
+    const usuario = props.usuario;
+    const deslogaUsuario = props.deslogaUsuario;
+    const logaUsuario = props.logaUsuario;
 
-function logaUsuario(dados) {
-    const json = JSON.stringify(dados) //Convertendo objetos para texto para armazenar//
-    localStorage.setItem('usuario', json) //localStorage armazena os dados do browser, mas apenas pequenos dados//
-    usuario = dados
-    console.log('dados', dados)
-}
-
-function deslogaUsuario (){
-    localStorage.removeItem('usuario');
-    usuario = null
-}
-
-function App() {
     return (
         <div className="app">
             {<Navbar usuario={usuario} deslogaUsuario={deslogaUsuario}/>}
@@ -45,9 +37,47 @@ function App() {
     )
 }
 
+// const state ={
+//     usuario: {"email: email@email.com"}
+// }
+
+function dadosParaComponente(state){
+    const props = {
+        usuario: state.usuario
+    }
+    return props
+}
+
+function funcoesParaAcoesViaProps(dispatch){
+    const props = {
+        logaUsuario: (dados) => {
+            const acao = {
+                type: "LOGA_USUARIO",
+                dados: dados
+            }
+            dispatch(acao)
+        },
+        deslogaUsuario: () =>{
+            const acao = {
+                type: "DESLOGA_USUARIO"
+            }
+            dispatch(acao)
+        }
+    }
+    return props
+}
+
+const conectaNaStore = connect(dadosParaComponente, funcoesParaAcoesViaProps)
+
+const AppConectada = withRouter(conectaNaStore(App))
+
+conectaNaStore(App)
+
 ReactDOM.render(
+    <Provider store={store}>
     <BrowserRouter>
-        <App />
-    </BrowserRouter>,
+        <AppConectada />
+    </BrowserRouter>
+    </Provider>,
     document.querySelector("#projeto")
 )
