@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { withRouter, BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import {Provider, connect} from "react-redux";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {Provider} from "react-redux";
 import store from "./redux/store";
 import './index.css';
 import Home from "./paginas/Home/Home";
@@ -12,18 +12,13 @@ import Contato from "./paginas/Contato/Contato";
 import NaoEncontrada from "./paginas/NaoEncontrada/NaoEncontrada";
 import Navbar from "./componentes/Navbar/Navbar";
 
-function App(props) {
-    const usuario = props.usuario;
-    const deslogaUsuario = props.deslogaUsuario;
-    const logaUsuario = props.logaUsuario;
+function App() {
 
     return (
         <div className="app">
             {<Navbar />}
             <Switch>
-                <Route path="/" exact render={() => {
-                    return usuario ? <Home/> : <Redirect to="/login"/>
-                }} />
+                <Route path="/" exact component={Home} />
                 <Route path="/conta" component={Conta} />
                 <Route path="/login" component={Login} />
                 <Route path="/quem-somos" component={QuemSomos} />
@@ -34,46 +29,11 @@ function App(props) {
     )
 }
 
-// const state ={
-//     usuario: {"email: email@email.com"}
-// }
-
-function dadosParaComponente(state){
-    const props = {
-        usuario: state.usuario
-    }
-    return props
-}
-
-function funcoesParaAcoesViaProps(dispatch){
-    const props = {
-        logaUsuario: (dados) => {
-            const acao = {
-                type: "LOGA_USUARIO",
-                dados: dados
-            }
-            dispatch(acao)
-        },
-        deslogaUsuario: () =>{
-            const acao = {
-                type: "DESLOGA_USUARIO"
-            }
-            dispatch(acao)
-        }
-    }
-    return props
-}
-
-const conectaNaStore = connect(dadosParaComponente, funcoesParaAcoesViaProps)
-
-const AppConectada = withRouter(conectaNaStore(App))
-
-conectaNaStore(App)
-
 ReactDOM.render(
-    <Provider store={store}>
+    // O provider não pode ser retirado, nem a store, pois como os filhos do App utilizam a store, não pode ser apagado do pai//
+    <Provider store={store}> 
     <BrowserRouter>
-        <AppConectada />
+        <App />
     </BrowserRouter>
     </Provider>,
     document.querySelector("#projeto")

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import "./Navbar.css";
 import logo from "./logo.png";
 import Menu from "../Menu/Menu";
@@ -39,4 +39,4 @@ const conectaNaStore = connect(passaNoPropsDadosDoEstado, passaNoPropsAcao)
 
 const NavbarConectado = conectaNaStore(Navbar)
 
-export default NavbarConectado;
+export default withRouter(NavbarConectado); //atualiza o componente sem a rota mudar. é necessário usar toda vez que o componente usa navlink//
