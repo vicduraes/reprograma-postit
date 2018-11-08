@@ -16,7 +16,7 @@ function App() {
 
     return (
         <div className="app">
-            {<Navbar />}
+            <Navbar />
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/conta" component={Conta} />
