@@ -13,6 +13,8 @@ class Home extends Component {
     }
 
     render() {
+        const cadastrando = !this.props.id
+    
         if (!this.props.usuaio) {
             return <Redirect to="/login" />
         }
@@ -26,6 +28,8 @@ class Home extends Component {
                             <div>
                                 {this.props.postits.map(item => (
                                     <Postit
+                                        key={item.id}
+                                        id={item.id}
                                         titulo={item.titulo}
                                         texto={item.texto}
                                     />

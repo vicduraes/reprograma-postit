@@ -14,11 +14,14 @@ class Postit extends Component {
         const form = evento.target // o target é usada para acessar os dados do form//
 
         const dados = {
+            id: `987535a5-8cfa-412b-8672-1e466617450${Math.random(100)}`,
             titulo: form.titulo.value,
             texto: form.texto.value
         }
 
         this.props.cadastraPostit(dados)
+
+        form.reset()
     }
 
     render() {
