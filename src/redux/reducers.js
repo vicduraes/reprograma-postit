@@ -28,6 +28,8 @@ function postits(state = [], action) {
     switch (action.type) {
         case 'CADASTRA_POSTIT':
             return state.concat(action.dados) // os dados recebidos aqui são da cadastraPostit, então para acessar os dados precisa acessar o 'objeto' action//
+        case 'ALTERA_POSTIT':
+            return state.map(item => item.id === action.dados.id ? action.dados : item)
         default:
             return state
     }

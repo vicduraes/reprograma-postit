@@ -17,3 +17,10 @@ export function cadastraPostit (dados){
         dados //dados: dados - sintaxe atual//
     }
 }
+
+export function alteraPostit (dados) {
+    return {
+        type: "ALTERA_POSTIT",
+        dados 
+    }
+}

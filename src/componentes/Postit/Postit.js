@@ -1,32 +1,51 @@
 import React, { Component } from "react";
-import {cadastraPostit} from "../../redux/actions";
-import {connect} from "react-redux";
+import { cadastraPostit, alteraPostit } from "../../redux/actions";
+import { connect } from "react-redux";
 import "./Postit.css";
 
 class Postit extends Component {
     constructor(props) {
         super(props)
-        // this.state: { }
+        this.state = { editando: false }
     }
 
     cadastraOuAlteraPostit = (evento) => {
-        evento.preventDefault ()
+        evento.preventDefault()
         const form = evento.target // o target é usada para acessar os dados do form//
+        const cadastrando = !this.props.id
 
-        const dados = {
-            id: `987535a5-8cfa-412b-8672-1e466617450${Math.random(100)}`,
-            titulo: form.titulo.value,
-            texto: form.texto.value
+        if (cadastrando) {
+            const dados = {
+                id: `987535a5-8cfa-412b-8672-1e466617450${Math.random(100)}`,
+                titulo: form.titulo.value,
+                texto: form.texto.value
+            }
+
+            this.props.cadastraPostit(dados)
+
+            form.reset()
+
+        } else {
+            const dados = {
+                id: this.props.id,
+                titulo: form.titulo.value,
+                texto: form.texto.value
+            }
+
+            this.props.alteraPostit(dados)
+
+            this.setState({editando: false})
         }
+    }
 
-        this.props.cadastraPostit(dados)
-
-        form.reset()
+    habilitaEdicao = () => {
+        this.setState({ editando: true })
     }
 
     render() {
+        const cadastrando = !this.props.id
         return (
-            <form className="postit" onSubmit={this.cadastraOuAlteraPostit}>
+            <form className="postit" onSubmit={this.cadastraOuAlteraPostit} onClick={this.habilitaEdicao}>
                 <input
                     className="postit__titulo"
                     type="text"
@@ -43,11 +62,14 @@ class Postit extends Component {
                     autoComplete="off"
                     defaultValue={this.props.texto}
                 />
-                <input
-                    className="postit__botao-concluir"
-                    type="submit"
-                    value="Concluído"
-                />
+                {(cadastrando || this.state.editando) && (
+                    <input
+                        className="postit__botao-concluir"
+                        type="submit"
+                        value="Concluído"
+                    />
+                )}
+
             </form>
         )
     }
@@ -55,5 +77,5 @@ class Postit extends Component {
 
 export default connect(
     null,
-    {cadastraPostit}
-) (Postit);
+    { cadastraPostit, alteraPostit }
+)(Postit);
