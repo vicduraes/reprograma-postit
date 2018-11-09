@@ -1,15 +1,15 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
 let usuarioInicial = null
 
 const json = localStorage.getItem('usuario')
-if (json){
+if (json) {
     usuarioInicial = JSON.parse(json)
 }
 
 
-function usuario (state = usuarioInicial, action) {
-    switch(action.type){
+function usuario(state = usuarioInicial, action) {
+    switch (action.type) {
         case 'LOGA_USUARIO':
             const usuarioLogado = action.dados
             const json = JSON.stringify(usuarioLogado)
@@ -24,14 +24,16 @@ function usuario (state = usuarioInicial, action) {
     }
 }
 
-function postits (postitsAtuais = [], action){
-    switch(action.type){
-        default: 
-            return postitsAtuais
+function postits(state = [], action) {
+    switch (action.type) {
+        case 'CADASTRA_POSTIT':
+            return state.concat(action.dados) // os dados recebidos aqui são da cadastraPostit, então para acessar os dados precisa acessar o 'objeto' action//
+        default:
+            return state
     }
 }
 
-const reducers = combineReducers ({
+const reducers = combineReducers({
     usuario: usuario,
     postits: postits
 })
