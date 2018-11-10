@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { cadastraPostit, alteraPostit } from "../../redux/actions";
+import { cadastraPostit, alteraPostit, deletaPostit } from "../../redux/actions";
 import { connect } from "react-redux";
+import {MdDelete} from 'react-icons/md';
 import "./Postit.css";
 
 class Postit extends Component {
@@ -34,7 +35,7 @@ class Postit extends Component {
 
             this.props.alteraPostit(dados)
 
-            this.setState({editando: false})
+            this.setState({ editando: false })
         }
     }
 
@@ -42,10 +43,24 @@ class Postit extends Component {
         this.setState({ editando: true })
     }
 
+    deletaPostit = (evento) => {
+        evento.stopPropagation ()
+        this.props.deletaPostit(this.props.id) // essa função é a ação do dispatch, não a função que está aqui (por isso o this.props.função e não só o this.função)
+    }
+
     render() {
         const cadastrando = !this.props.id
         return (
             <form className="postit" onSubmit={this.cadastraOuAlteraPostit} onClick={this.habilitaEdicao}>
+                {!cadastrando && this.state.editando && (
+                    <input
+                        className="postit__botao-remover"
+                        type="button"
+                        value={<MdDelete/>}
+                        onClick={this.deletaPostit}
+                    />
+                )}
+
                 <input
                     className="postit__titulo"
                     type="text"
@@ -77,5 +92,5 @@ class Postit extends Component {
 
 export default connect(
     null,
-    { cadastraPostit, alteraPostit }
+    { cadastraPostit, alteraPostit, deletaPostit }
 )(Postit);
